@@ -18,6 +18,7 @@ package com.example.android.implicitintents;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
@@ -66,10 +67,12 @@ public class MainActivity extends AppCompatActivity {
      * @param v Button that was clicked.
      */
     public void onClickShareTextButton(View v) {
-        // TODO (5) Specify a String you'd like to share
+        // (5) Specify a String you'd like to share
+        final String textToShare = "Yo, wasup ?";
 
-        // TODO (6) Replace the Toast with shareText, passing in the String from step 5
-        Toast.makeText(this, "TODO: Share text when this is clicked", Toast.LENGTH_LONG).show();
+
+        // (6) Replace the Toast with shareText, passing in the String from step 5
+        shareText(textToShare);
     }
 
     /**
@@ -143,12 +146,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // TODO (1) Create a void method called shareText that accepts a String as a parameter
-    // Do steps 2 - 4 within the shareText method
+    // (1) Create a void method called shareText that accepts a String as a parameter
+    public void shareText(String someText) {
+        // Do steps 2 - 4 within the shareText method
 
-        // TODO (2) Create a String variable called mimeType and set it to "text/plain"
-
-        // TODO (3) Create a title for the chooser window that will pop up
-
-        // TODO (4) Use ShareCompat.IntentBuilder to build the Intent and start the chooser
+        // (2) Create a String variable called mimeType and set it to "text/plain"
+        // (3) Create a title for the chooser window that will pop up
+        // (4) Use ShareCompat.IntentBuilder to build the Intent and start the chooser
+        ShareCompat.IntentBuilder
+                .from(this)
+                .setType("text/plain")
+                .setChooserTitle("Start a conversation")
+                .setText(someText)
+                .startChooser();
+    }
 }
