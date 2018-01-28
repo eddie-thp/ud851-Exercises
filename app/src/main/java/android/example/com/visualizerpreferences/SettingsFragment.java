@@ -27,9 +27,11 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
 import android.widget.Toast;
 
-// TODO (1) Implement OnPreferenceChangeListener
+// (1) Implement OnPreferenceChangeListener
 public class SettingsFragment extends PreferenceFragmentCompat implements
-        OnSharedPreferenceChangeListener {
+        Preference.OnPreferenceChangeListener, // Before preference is saved (validation)
+        OnSharedPreferenceChangeListener // After preference is saved
+    {
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
@@ -49,9 +51,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
             if (!(p instanceof CheckBoxPreference)) {
                 String value = sharedPreferences.getString(p.getKey(), "");
                 setPreferenceSummary(p, value);
+
+                // (3) Add the OnPreferenceChangeListener specifically to the EditTextPreference
+                if (p.getKey() == getString(R.string.pref_size_key)) {
+                    p.setOnPreferenceChangeListener(this);
+                }
             }
         }
-        // TODO (3) Add the OnPreferenceChangeListener specifically to the EditTextPreference
     }
 
     @Override
@@ -88,12 +94,33 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         }
     }
 
-    // TODO (2) Override onPreferenceChange. This method should try to convert the new preference value
+    // (2) Override onPreferenceChange. This method should try to convert the new preference value
     // to a float; if it cannot, show a helpful error message and return false. If it can be converted
     // to a float check that that float is between 0 (exclusive) and 3 (inclusive). If it isn't, show
     // an error message and return false. If it is a valid number, return true.
-
     @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        if (preference.getKey() == getString(R.string.pref_size_key) &&
+                newValue instanceof String)
+        {
+            String newValueString = (String) newValue;
+            try {
+                Float v = Float.parseFloat(newValueString);
+                if (!v.isNaN() && (v >= 0 && v <= 3)) {
+                    return true;
+                }
+            } catch (NumberFormatException e) {
+
+            }
+        }
+
+        // TODO Toast
+        return false;
+    }
+
+
+
+        @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getPreferenceScreen().getSharedPreferences()

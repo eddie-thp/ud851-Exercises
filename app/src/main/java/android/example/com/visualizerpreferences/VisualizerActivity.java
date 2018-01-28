@@ -28,6 +28,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -70,8 +71,14 @@ public class VisualizerActivity extends AppCompatActivity implements SharedPrefe
     }
 
     private void loadSizeFromSharedPreferences(SharedPreferences sharedPreferences) {
-        float minSize = Float.parseFloat(sharedPreferences.getString(getString(R.string.pref_size_key),
-                getString(R.string.pref_size_default)));
+        float minSize = Float.parseFloat(getString(R.string.pref_size_default));
+
+        try {
+            minSize = Float.parseFloat(sharedPreferences.getString(getString(R.string.pref_size_key), getString(R.string.pref_size_default)));
+        } catch (NumberFormatException e) {
+            Log.e("THIS", "Failed to load preference, using default");
+        }
+
         mVisualizerView.setMinSizeScale(minSize);
     }
 
@@ -89,8 +96,7 @@ public class VisualizerActivity extends AppCompatActivity implements SharedPrefe
         } else if (key.equals(getString(R.string.pref_color_key))) {
             loadColorFromPreferences(sharedPreferences);
         } else if (key.equals(getString(R.string.pref_size_key))) {
-            float minSize = Float.parseFloat(sharedPreferences.getString(getString(R.string.pref_size_key), "1.0"));
-            mVisualizerView.setMinSizeScale(minSize);
+            loadSizeFromSharedPreferences(sharedPreferences);
         }
     }
 
