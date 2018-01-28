@@ -73,8 +73,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
      * @param value      The value that the preference was updated to
      */
     private void setPreferenceSummary(Preference preference, String value) {
-        // TODO (3) Don't forget to add code here to properly set the summary for an EditTextPreference
-        if (preference instanceof ListPreference) {
+        // (3) Don't forget to add code here to properly set the summary for an EditTextPreference
+        if (preference instanceof EditTextPreference) {
+            preference.setSummary(((EditTextPreference) preference).getText());
+
+        } else if (preference instanceof ListPreference) {
             // For list preferences, figure out the label of the selected value
             ListPreference listPreference = (ListPreference) preference;
             int prefIndex = listPreference.findIndexOfValue(value);

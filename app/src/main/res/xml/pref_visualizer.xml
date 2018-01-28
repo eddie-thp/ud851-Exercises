@@ -23,8 +23,13 @@
         android:summaryOn="@string/pref_show_true"
         android:title="@string/pref_show_treble_label" />
 
-    <!-- TODO (1) Add and EditTextPreference with all of the appropriate strings stored in strings.xml.
+    <!-- (1) Add and EditTextPreference with all of the appropriate strings stored in strings.xml.
         It should have a key, default value of 1 and title -->
+    <EditTextPreference
+        android:title="@string/pref_min_size_scale_title"
+        android:key="@string/pref_min_size_scale_key"
+        android:defaultValue="@string/pref_min_size_scale_default_value"
+        />
 
     <ListPreference
         android:defaultValue="@string/pref_color_red_value"
