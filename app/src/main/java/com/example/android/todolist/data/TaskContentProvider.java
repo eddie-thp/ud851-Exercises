@@ -165,14 +165,20 @@ public class TaskContentProvider extends ContentProvider {
         int result;
         switch (match) {
             case TASK_WITH_ID:
-                result = db.delete(TABLE_NAME, selection, selectionArgs);
+                // Get the task ID from the URI path
+                String id = uri.getPathSegments().get(1);
+                // Use selections/selectionArgs to filter for this ID
+                // TODO we should likely create a constant for _id=?
+                result = db.delete(TABLE_NAME, "_id=?", new String[]{id});
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
         // COMPLETED (3) Notify the resolver of a change and return the number of items deleted
-        getContext().getContentResolver().notifyChange(uri, null);
+        if (result != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
 
         return result;
     }
