@@ -30,10 +30,10 @@ public class WaterReminderFirebaseJobService extends JobService{
     // COMPLETED (4) Override onStartJob
     @Override
     public boolean onStartJob(final JobParameters jobParameters) {
-        // TODO (5) By default, jobs are executed on the main thread, so make an anonymous class extending
+        // COMPLETED (5) By default, jobs are executed on the main thread, so make an anonymous class extending
         //  AsyncTask called mBackgroundTask.
         mBackgroundTask = new AsyncTask<Object, Object, Object>() {
-            // TODO (6) Override doInBackground
+            // COMPLETED (6) Override doInBackground
             @Override
             protected Object doInBackground(Object... objects) {
                 // COMPLETED (7) Use ReminderTasks to execute the new charging reminder task you made, use
@@ -66,9 +66,9 @@ public class WaterReminderFirebaseJobService extends JobService{
     @Override
     public boolean onStopJob(JobParameters jobParameters) {
         // COMPLETED (12) If mBackgroundTask is valid, cancel it
-        if (mBackgroundTask.isValid())
+        if (mBackgroundTask != null)
         {
-            mBackgroundTask.cancel();
+            mBackgroundTask.cancel(true);
         }
         // COMPLETED (13) Return true to signify the job should be retried
         return true;
